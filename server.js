@@ -15,6 +15,9 @@ connectDB();
 // INITIALIZED EXPRESS
 const app = express();
 
+//HTTP REQUEST BODY parser
+app.use(express.json());
+
 // Dev logging middlewares
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
