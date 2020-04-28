@@ -1,6 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
-// const logger = require('./middlewares/logger');
+const errorHandler = require('./middlewares/error');
 const bootcamps = require('./routes/bootcamps');
 const morgan = require('morgan');
 const colors = require('colors');
@@ -25,6 +25,7 @@ if (process.env.NODE_ENV === 'development') {
 
 // MOUNT routers
 app.use('/api/v1/bootcamps', bootcamps);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {

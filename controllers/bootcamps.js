@@ -1,5 +1,5 @@
 const Bootcamp = require('../models/Bootcamp');
-
+const ErrorResponse = require('../utils/errorResponse');
 //@desc  GET all bootcamps
 //@route GET /api/v1/bootcamps
 //@access Public
@@ -10,7 +10,7 @@ exports.getBootcamps = async (req, res, next) => {
       .status(200)
       .json({ success: true, count: bootCamps.length, data: bootCamps });
   } catch (error) {
-    res.status(400).json({ success: false, data: 'Bad Request' });
+    next(error);
   }
 };
 
@@ -22,11 +22,13 @@ exports.getBootcamp = async (req, res, next) => {
     const bootCamp = await Bootcamp.findById(req.params.id);
 
     if (!bootCamp) {
-      return res.status(400).json({ success: false });
+      return next(
+        new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 404)
+      );
     }
     res.status(200).json({ success: true, data: bootCamp });
   } catch (error) {
-    res.status(400).json({ success: false, data: 'Bad Request' });
+    next(error);
   }
 };
 
@@ -42,10 +44,7 @@ exports.createBootcamp = async (req, res, next) => {
       data: bootcamp,
     });
   } catch (error) {
-    res.status(400).json({
-      succes: false,
-      data: 'bad request',
-    });
+    next(error);
   }
 };
 
@@ -64,12 +63,14 @@ exports.updateBootcamp = async (req, res, next) => {
     );
 
     if (!updateBootcamp) {
-      return res.status(400).json({ success: false });
+      return next(
+        new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 404)
+      );
     }
 
     res.status(200).json({ success: true, data: updateBootcamp });
   } catch (error) {
-    res.status(400).json({ success: false });
+    next(error);
   }
 };
 
@@ -81,11 +82,13 @@ exports.deleteBootcamp = async (req, res, next) => {
     const deleteBootcamp = await Bootcamp.findByIdAndDelete(req.params.id);
 
     if (!deleteBootcamp) {
-      return res.status(400).json({ success: false });
+      return next(
+        new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 404)
+      );
     }
 
     res.status(200).json({ success: true, data: deleteBootcamp });
   } catch (error) {
-    res.status(400).json({ success: false });
+    next(error);
   }
 };
