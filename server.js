@@ -7,7 +7,7 @@ const connectDB = require('./config/db');
 
 // ROUTES FILES
 const bootcamps = require('./routes/bootcamps');
-const courses = requir('./routes/courses');
+const courses = require('./routes/courses');
 
 // LOAD ENV vars
 dotenv.config({ path: './config/config.env' });
