@@ -31,7 +31,6 @@ const CourseSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-
   //   To create a relation ship in bootcamp. meaning every course must be under the bootcamp
   bootcamp: {
     type: mongoose.Schema.ObjectId,
