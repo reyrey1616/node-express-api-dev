@@ -52,16 +52,25 @@ CourseSchema.statics.getAverageCost = async function (bootcampId) {
       $group: { _id: '$bootcamp', averageCost: { $avg: '$tuition' } },
     },
   ]);
+
+  try {
+    await this.model('Bootcamp').findByIdAndUpdate(bootcampId, {
+      averageCost: Math.ceil(obj[0].averageCost / 10) * 10,
+    });
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 // Call getAverage cost after save
-CourseSchema.post('save', function (next) {
+CourseSchema.post('save', function () {
   this.constructor.getAverageCost(this.bootcamp);
 });
 
 // Call getAverage cost before remove
-CourseSchema.pre('remove', function (next) {
+CourseSchema.pre('remove', function () {
   this.constructor.getAverageCost(this.bootcamp);
+  console.log('I FIRED'.red);
 });
 
 module.exports = mongoose.model('Course', CourseSchema);
