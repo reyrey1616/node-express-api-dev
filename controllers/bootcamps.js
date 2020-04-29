@@ -12,7 +12,7 @@ exports.getBootcamps = asyncHandler(async (req, res, next) => {
   // Copy req.query
   reqQuery = { ...req.query };
 
-  const removeFields = ['select', 'sort'];
+  const removeFields = ['select', 'sort', 'page', 'limit'];
 
   //Loop over removeFields and delete them from query
   removeFields.forEach((param) => delete reqQuery[param]);
@@ -43,12 +43,41 @@ exports.getBootcamps = asyncHandler(async (req, res, next) => {
     query = query.sort('-createdAt');
   }
 
+  // Pagination
+  const page = parseInt(req.query.page, 10) || 1;
+  const limit = parseInt(req.query.limit, 10) || 25;
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+  const total = await Bootcamp.countDocuments();
+  console.log(startIndex, endIndex);
+  query = query.skip(startIndex).limit(limit);
+
   // Executing query
   const bootCamps = await query;
 
-  res
-    .status(200)
-    .json({ success: true, count: bootCamps.length, data: bootCamps });
+  // pagination results
+  const pagination = {};
+
+  if (endIndex < total) {
+    pagination.next = {
+      page: page + 1,
+      limit,
+    };
+  }
+
+  if (startIndex > 0) {
+    pagination.prev = {
+      page: page - 1,
+      limit,
+    };
+  }
+
+  res.status(200).json({
+    success: true,
+    count: bootCamps.length,
+    pagination,
+    data: bootCamps,
+  });
 });
 
 //@desc GET single bootcamps
