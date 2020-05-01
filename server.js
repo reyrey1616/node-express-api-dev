@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const colors = require('colors');
 const fileupload = require('express-fileupload');
 const connectDB = require('./config/db');
+const cookieParser = require('cookie-parser');
 
 // ROUTES FILES
 const bootcamps = require('./routes/bootcamps');
@@ -23,6 +24,9 @@ const app = express();
 
 //HTTP REQUEST BODY parser
 app.use(express.json());
+
+// Cookie Parser
+app.use(cookieParser());
 
 // Dev logging middlewares
 if (process.env.NODE_ENV === 'development') {
