@@ -122,6 +122,15 @@ exports.deleteCourse = asyncHandler(async (req, res, next) => {
     );
   }
 
+  if (course.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(
+      new ErrorResponse(
+        `User ${req.user.id} is not authorized to delete this course`,
+        401
+      )
+    );
+  }
+
   await course.remove();
 
   res.status(200).json({
