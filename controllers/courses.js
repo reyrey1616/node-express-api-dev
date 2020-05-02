@@ -89,6 +89,15 @@ exports.updateCourse = asyncHandler(async (req, res, next) => {
     );
   }
 
+  if (course.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(
+      new ErrorResponse(
+        `User ${req.user.id} is not authorized to update this course`,
+        401
+      )
+    );
+  }
+
   course = await Course.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
