@@ -6,7 +6,7 @@ const asyncHandler = require('../middlewares/async');
 //@route GET /api/v1/users
 //@access Private/Admin
 exports.getUsers = asyncHandler(async (req, res, next) => {
-  res.status(200).json(res.advancedResult);
+  res.status(200).json(res.advancedResults);
 });
 
 //@desc  GET SINGLE USERS
