@@ -9,6 +9,7 @@ const connectDB = require('./config/db');
 const cookieParser = require('cookie-parser');
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
+const xss = require('xss-clean');
 
 // ROUTES FILES
 const bootcamps = require('./routes/bootcamps');
@@ -31,6 +32,9 @@ app.use(express.json());
 
 // Mongo Sanitize data
 app.use(mongoSanitize());
+
+// Too prevent cross site scripting/XSS
+app.use(xss());
 
 // Set security headers
 app.use(helmet());
