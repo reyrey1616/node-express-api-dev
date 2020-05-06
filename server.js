@@ -10,6 +10,8 @@ const cookieParser = require('cookie-parser');
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
 const xss = require('xss-clean');
+const hpp = require('hpp');
+const rateLimit = require('express-rate-limit');
 
 // ROUTES FILES
 const bootcamps = require('./routes/bootcamps');
@@ -29,6 +31,17 @@ const app = express();
 
 //HTTP REQUEST BODY parser
 app.use(express.json());
+
+// Rate limiting | to limit the number of API request of a single IP
+const limiter = rateLimit({
+  windowMs: 10 * 60 * 1000, //10 mins
+  max: 100,
+});
+
+app.use(limiter);
+
+// Prevent HTTP Param pollution
+app.use(hpp());
 
 // Mongo Sanitize data
 app.use(mongoSanitize());
