@@ -64,4 +64,8 @@ ReviewSchema.post('save', function () {
   this.constructor.getAverageRating(this.bootcamp);
 });
 
+// Call getAverage rating before remove
+ReviewSchema.pre('remove', function () {
+  this.constructor.getAverageRating(this.bootcamp);
+});
 module.exports = mongoose.model('Review', ReviewSchema);
