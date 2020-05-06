@@ -8,6 +8,7 @@ const fileupload = require('express-fileupload');
 const connectDB = require('./config/db');
 const cookieParser = require('cookie-parser');
 const mongoSanitize = require('express-mongo-sanitize');
+const helmet = require('helmet');
 
 // ROUTES FILES
 const bootcamps = require('./routes/bootcamps');
@@ -30,6 +31,9 @@ app.use(express.json());
 
 // Mongo Sanitize data
 app.use(mongoSanitize());
+
+// Set security headers
+app.use(helmet());
 
 // Cookie Parser
 app.use(cookieParser());
