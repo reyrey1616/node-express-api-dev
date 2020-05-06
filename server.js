@@ -12,6 +12,7 @@ const helmet = require('helmet');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const rateLimit = require('express-rate-limit');
+const cors = require('cors');
 
 // ROUTES FILES
 const bootcamps = require('./routes/bootcamps');
@@ -51,6 +52,9 @@ app.use(xss());
 
 // Set security headers
 app.use(helmet());
+
+// Enable CROSS ORIGIN RESOURCE SHARING
+app.use(cors());
 
 // Cookie Parser
 app.use(cookieParser());
